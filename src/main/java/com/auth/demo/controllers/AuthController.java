@@ -55,15 +55,11 @@ private String testingToken(AuthenticationRequest authenticationrequest, UserMod
  Authentication loggedInUser = SecurityContextHolder.getContext().getAuthentication();
      String username = loggedInUser.getName();
      UserModel user = userRepository.findByUsername(username);
-     String roleauth=user.getRole();
-    /* if(roleauth =="recruiteur"){
-      return "Welcome "+ user.getRole()+ "to your dashboard";
-     }else {
-         return "Access denied Mr le "+roleauth;}*/
-   
-         return user.getUsername();
-     
-    	 }
+     String role = user.getUsername();
+     	
+         return role;
+}
+
 
 @GetMapping("/getToken")
 private ResponseEntity<?> getToken(AuthenticationRequest authenticationrequest, UserModel usermodel, String authenticationResponse){
