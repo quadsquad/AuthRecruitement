@@ -61,7 +61,7 @@ private String testingToken(AuthenticationRequest authenticationrequest, UserMod
      }else {
          return "Access denied Mr le "+roleauth;}*/
    
-         return "Welcome "+ user.getRole()+ " to your dashboard";
+         return user.getUsername();
      
     	 }
 
