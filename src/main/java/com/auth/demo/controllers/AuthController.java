@@ -7,6 +7,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -54,10 +55,16 @@ private String testingToken(AuthenticationRequest authenticationrequest, UserMod
  Authentication loggedInUser = SecurityContextHolder.getContext().getAuthentication();
      String username = loggedInUser.getName();
      UserModel user = userRepository.findByUsername(username);
-     String role = user.getRole();
-     	
-         return role;
-}
+     String roleauth=user.getRole();
+    /* if(roleauth =="recruiteur"){
+      return "Welcome "+ user.getRole()+ "to your dashboard";
+     }else {
+         return "Access denied Mr le "+roleauth;}*/
+   
+         return "Welcome "+ user.getRole()+ " to your dashboard";
+     
+    	 }
+
 @GetMapping("/getToken")
 private ResponseEntity<?> getToken(AuthenticationRequest authenticationrequest, UserModel usermodel, String authenticationResponse){
 
@@ -305,5 +312,14 @@ return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
 }
 
 
+@GetMapping("/get-user/{id_user}")
+public ResponseEntity<?> getUser(@PathVariable String id_user) {
+	if (userRepository.findById(id_user).isPresent()) {
+		UserModel u = userRepository.findById(id_user).get();
+		return new ResponseEntity<UserModel>(u, HttpStatus.OK);
+	} else {
+		return new ResponseEntity<>("Error finding user", HttpStatus.NOT_FOUND);
+	}
+}
 
 }
