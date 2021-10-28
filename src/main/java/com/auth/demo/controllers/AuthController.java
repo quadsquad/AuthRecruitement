@@ -220,10 +220,13 @@ return ResponseEntity.ok(new AuthenticationResponse(e.getMessage()));
 
 
 //Update Profile
-@PutMapping("/updateprofile/{id}")
-private ResponseEntity<?> authenticateClientUpdate(@PathVariable("id") String id,@RequestBody UserModel userModel){
+@PutMapping("/updateprofileconnected")
+private ResponseEntity<?> authenticateClientUpdate(@RequestBody UserModel userModel){
 
-Optional<UserModel> userOptional = userRepository.findById(id);
+	 Authentication loggedInUser = SecurityContextHolder.getContext().getAuthentication();
+     String username = loggedInUser.getName();
+     UserModel user = userRepository.findByUsername(username);
+     Optional<UserModel> userOptional = userRepository.findById(user.getId());
 
 UserModel e=  userRepository.findByUsername(userOptional.get().getUsername());
 String role= e.getRole();
@@ -273,12 +276,15 @@ return new ResponseEntity<>("ERROR", HttpStatus.NOT_FOUND);
 
 }
 
-@PutMapping("/editpicture/{id}")
-private ResponseEntity<?> updatePicture(@PathVariable("id") String id,@RequestBody UserModel userModel){
+@PutMapping("/editpicture")
+private ResponseEntity<?> updatePicture(@RequestBody UserModel userModel){
 
-Optional<UserModel> userOptional = userRepository.findById(id);
+	 Authentication loggedInUser = SecurityContextHolder.getContext().getAuthentication();
+     String username = loggedInUser.getName();
+     UserModel user = userRepository.findByUsername(username);
+     Optional<UserModel> userOptional = userRepository.findById(user.getId());
 
-UserModel e=  userRepository.findByUsername(userOptional.get().getUsername());
+UserModel e=userRepository.findByUsername(userOptional.get().getUsername());
 
 try{
 UserModel saveUser =userOptional.get();
@@ -292,10 +298,13 @@ return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
 }
 }
 
-@PutMapping("/editlogoEntreprise/{id}")
-private ResponseEntity<?> updateEntrepriseLogo(@PathVariable("id") String id,@RequestBody UserModel userModel){
+@PutMapping("/editlogoEntreprise")
+private ResponseEntity<?> updateEntrepriseLogo(@RequestBody UserModel userModel){
 
-Optional<UserModel> userOptional = userRepository.findById(id);
+	 Authentication loggedInUser = SecurityContextHolder.getContext().getAuthentication();
+     String username = loggedInUser.getName();
+     UserModel user = userRepository.findByUsername(username);
+     Optional<UserModel> userOptional = userRepository.findById(user.getId());
 
 UserModel e=userRepository.findByUsername(userOptional.get().getUsername());
 
@@ -311,7 +320,7 @@ return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
 }
 }
 
-
+//FN DE AHMED
 @GetMapping("/get-user/{id_user}")
 public ResponseEntity<?> getUser(@PathVariable String id_user) {
 	if (userRepository.findById(id_user).isPresent()) {
