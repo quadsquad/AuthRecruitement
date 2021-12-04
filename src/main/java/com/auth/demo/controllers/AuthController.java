@@ -1,6 +1,5 @@
 package com.auth.demo.controllers;
 
-
 import java.util.Optional;
 import java.util.List;
 
@@ -19,12 +18,17 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.auth.demo.entities.AuthenticationRequest;
 import com.auth.demo.entities.AuthenticationResponse;
+import com.auth.demo.entities.ConfirmationToken;
 import com.auth.demo.entities.UserModel;
+import com.auth.demo.repositories.ConfirmationTokenRepository;
 import com.auth.demo.repositories.UserRepository;
+import com.auth.demo.services.EmailSenderService;
 import com.auth.demo.services.JwtUtils;
 import com.auth.demo.services.UserService;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -49,13 +53,19 @@ private UserService userService;
 @Autowired
 private JwtUtils jwtUtils;
 
+@Autowired
+private ConfirmationTokenRepository confirmationTokenRepository;
+
+@Autowired
+private EmailSenderService emailSenderService;
+
 @GetMapping("/content")
 private String testingToken(AuthenticationRequest authenticationrequest, UserModel usermodel, String authenticationResponse){
 
  Authentication loggedInUser = SecurityContextHolder.getContext().getAuthentication();
-     String username = loggedInUser.getName();
-     UserModel user = userRepository.findByUsername(username);
-     String role = user.getUsername();
+     String email = loggedInUser.getName();
+     UserModel user = userRepository.findByEmail(email);
+     String role = user.getEmail();
      	
          return role;
 }
@@ -65,11 +75,11 @@ private String testingToken(AuthenticationRequest authenticationrequest, UserMod
 private ResponseEntity<?> getToken(AuthenticationRequest authenticationrequest, UserModel usermodel, String authenticationResponse){
 
 	 Authentication loggedInUser = SecurityContextHolder.getContext().getAuthentication();
-	     String username = loggedInUser.getName();
-	     UserModel user = userRepository.findByUsername(username);
+	     String email = loggedInUser.getName();
+	     UserModel user = userRepository.findByEmail(email);
 	    // String role = user.getRole();
 	     	
-	     return new ResponseEntity<>(username, HttpStatus.ACCEPTED);  	
+	     return new ResponseEntity<>(email, HttpStatus.ACCEPTED);  	
        
 }
 
@@ -91,89 +101,88 @@ public ResponseEntity<?> getAllUsers(){
 private UserModel getuser(AuthenticationRequest authenticationrequest, UserModel usermodel){
 
  Authentication loggedInUser = SecurityContextHolder.getContext().getAuthentication();
-     String username = loggedInUser.getName();
-     UserModel user = userRepository.findByUsername(username);
-     String fullname = user.getFullname();
-     String email = user.getEmail();
-     String age = user.getAge();
-     String userPicture = user.getUserPicture();
-     String speciality = user.getSpeciality();
-     String diploma = user.getDiploma();
-   String entreprise_name = user.getEntreprise_name();
- String entreprise_domaine= user.getEntreprise_domaine();
- String entreprise_logo = user.getEntreprise_logo();
+     String email = loggedInUser.getName();
+     UserModel user = userRepository.findByEmail(email);
+ 	String lastname = user.getLastname();
+	String firstname = user.getFirstname();
+	String userPicture = user.getUserPicture();
+	String role = user.getRole();
+	String phonenumber= user.getPhonenumber();
+	String country= user.getCountry();
+	String city= user.getCity();
+	String business_logo= user.getBusiness_logo();
+    String address = user.getAddress();
+    String business_website= user.getBusiness_website();
+    String business_name= user.getBusiness_name();
 
-     String role = user.getRole();
-     if (role.equals("stagiaire")){
-return new UserModel(username,fullname,email,age,userPicture,speciality,role);
-}else if(role.equals("employee"))
-{
-return new UserModel(username,fullname,email,age,userPicture,speciality,diploma,role);
-}
-else if(role.equals("recruiteur"))
-{
-return new UserModel(username,email,entreprise_name,entreprise_domaine,entreprise_logo,role);
+     if (role.equals("particular")){
+return new UserModel(email, role, userPicture, firstname, lastname, country, city);
 }else{
-return new UserModel(username,fullname,email,userPicture,role);
+return new UserModel(email, phonenumber, country, city, business_name, business_logo, business_website, address, role);
 }
 }
 
 //Subscribe
+/**
+ * @param authenticationRequest
+ * @return
+ */
+/**
+ * @param authenticationRequest
+ * @return
+ */
 @PostMapping("/subscribe")
 private ResponseEntity<?> subscribeClient(@RequestBody AuthenticationRequest authenticationRequest){
 String pwd= authenticationRequest.getPassword();
-String username= authenticationRequest.getUsername();
-String fullname = authenticationRequest.getFullname();
-String email = authenticationRequest.getEmail();
+String cpwd= authenticationRequest.getConfirmpassword();
+String lastname = authenticationRequest.getLastname();
+String firstname = authenticationRequest.getFirstname();
+String userPicture = authenticationRequest.getUserPicture();
 String role = authenticationRequest.getRole();
-String age = authenticationRequest.getAge();
-String speciality = authenticationRequest.getSpeciality();
-String diploma = authenticationRequest.getDiploma();
-String entreprise_name = authenticationRequest.getEntreprise_name();
-String entreprise_domaine= authenticationRequest.getEntreprise_domaine();
-String entreprise_logo = authenticationRequest.getEntreprise_logo();
+String phonenumber= authenticationRequest.getPhonenumber();
+String country= authenticationRequest.getCountry();
+String city= authenticationRequest.getCity();
+String business_logo= authenticationRequest.getBusiness_logo();
+String address = authenticationRequest.getAddress();
+String business_website= authenticationRequest.getBusiness_website();
+String business_name= authenticationRequest.getBusiness_name();
+String email= authenticationRequest.getEmail();
 
 UserModel userModel= new UserModel();
-if(role.equals("stagiaire"))
+if(role.equals("particular"))
 {
-userModel.setUsername(username);
+userModel.setLastname(lastname);
 userModel.setPassword(passwordencoder.encode(pwd));
-userModel.setFullname(fullname);
+userModel.setFirstname(firstname);
 userModel.setEmail(email);
-userModel.setAge(age);
-userModel.setUserPicture("https://e7.pngegg.com/pngimages/505/761/png-clipart-login-computer-icons-avatar-icon-monochrome-black-thumbnail.png");
-userModel.setSpeciality(speciality);
+userModel.setCountry(country);
+userModel.setCity(city);
+userModel.setUserPicture(userPicture);
 userModel.setRole(role);
-} else if (role.equals("employee")) {
-userModel.setUsername(username);
-userModel.setPassword(passwordencoder.encode(pwd));
-userModel.setEmail(email);
-userModel.setFullname(fullname);
-userModel.setRole(role);
-userModel.setAge(age);
-userModel.setUserPicture("https://e7.pngegg.com/pngimages/505/761/png-clipart-login-computer-icons-avatar-icon-monochrome-black-thumbnail.png");
-userModel.setSpeciality(speciality);
-userModel.setDiploma(diploma);
-} else if (role.equals("recruiteur"))
+userModel.setEnabled(false);
+} else if (role.equals("business"))
 {
-userModel.setUsername(username);
 userModel.setPassword(passwordencoder.encode(pwd));
 userModel.setEmail(email);
-userModel.setEntreprise_name(entreprise_name);
-userModel.setEntreprise_domaine(entreprise_domaine);
-userModel.setEntreprise_logo(entreprise_logo);
+userModel.setBusiness_name(business_name);
+userModel.setBusiness_logo(business_logo);
+userModel.setBusiness_website(business_website);
+userModel.setAddress(address);
+userModel.setPhonenumber(phonenumber);
+userModel.setCountry(country);
+userModel.setCity(city);
 userModel.setRole(role);
-//userModel.setAge((Integer) null);
+userModel.setEnabled(false);
 
 }else if (role.equals("admin")) {
-userModel.setFullname(fullname);
-userModel.setEmail(email);
-userModel.setUsername(username);
-userModel.setPassword(passwordencoder.encode(pwd));
-userModel.setUserPicture("https://e7.pngegg.com/pngimages/505/761/png-clipart-login-computer-icons-avatar-icon-monochrome-black-thumbnail.png");
-userModel.setRole(role);
-// userModel.setAge((Integer) null);
-
+	userModel.setLastname(lastname);
+	userModel.setPassword(passwordencoder.encode(pwd));
+	userModel.setFirstname(firstname);
+	userModel.setEmail(email);
+	userModel.setCountry(country);
+	userModel.setCity(city);
+	userModel.setUserPicture(userPicture);
+	userModel.setRole(role);
 }
 else {
 System.err.println();
@@ -181,35 +190,47 @@ System.err.println();
 
 try {
 userRepository.save(userModel);
+ConfirmationToken confirmationToken = new ConfirmationToken(userModel);
+
+confirmationTokenRepository.save(confirmationToken);
+
+SimpleMailMessage mailMessage = new SimpleMailMessage();
+mailMessage.setTo(userModel.getEmail());
+mailMessage.setSubject("Complete Registration!");
+mailMessage.setFrom("quadsquad1997@gmail.com");
+mailMessage.setText("To confirm your account, please click here : "
++"http://localhost:8088/confirm-account?token="+confirmationToken.getConfirmationToken());
+
+emailSenderService.sendEmail(mailMessage);
+
 
 }catch(Exception e){
-return ResponseEntity.ok(new AuthenticationResponse("Error during subscription"+username));
+return ResponseEntity.ok(new AuthenticationResponse("Error during subscription"+email));
 
 }
-return ResponseEntity.ok(new AuthenticationResponse("Successful subscription"+username));
+return ResponseEntity.ok(new AuthenticationResponse("Successful subscription"+email));
 
 }
 
 @PostMapping("/auth")
 private ResponseEntity<?> authenticateClient(@RequestBody AuthenticationRequest authenticationRequest){
-String username= authenticationRequest.getUsername();
+String email= authenticationRequest.getEmail();
 String password= authenticationRequest.getPassword();
 
 
 try {
-authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username,password));
+authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email,password));
 
 }catch(Exception e){
 return ResponseEntity.ok(new AuthenticationResponse(e.getMessage()));
 
 }
 
-    UserDetails loadedUser= userService.loadUserByUsername(username);
+    UserDetails loadedUser= userService.loadUserByUsername(email);
     String generatedToken= jwtUtils.generateToken(loadedUser);
     Authentication loggedInUser = SecurityContextHolder.getContext().getAuthentication();
-    UserModel user = userRepository.findByUsername(username);
+    UserModel user = userRepository.findByEmail(email);
     String role = user.getRole();
-
      return ResponseEntity.ok(new AuthenticationResponse(generatedToken, role));
 
 }
@@ -220,51 +241,47 @@ return ResponseEntity.ok(new AuthenticationResponse(e.getMessage()));
 private ResponseEntity<?> authenticateClientUpdate(@RequestBody UserModel userModel){
 
 	 Authentication loggedInUser = SecurityContextHolder.getContext().getAuthentication();
-     String username = loggedInUser.getName();
-     UserModel user = userRepository.findByUsername(username);
+     String email = loggedInUser.getName();
+     UserModel user = userRepository.findByEmail(email);
      Optional<UserModel> userOptional = userRepository.findById(user.getId());
 
-UserModel e=  userRepository.findByUsername(userOptional.get().getUsername());
+UserModel e=  userRepository.findByEmail(userOptional.get().getEmail());
 String role= e.getRole();
-if(role.equals("stagiaire"))
+if(role.equals("particular"))
 {
 UserModel saveUser =userOptional.get();
-saveUser.setUsername(userModel.getUsername()!=null ? userModel.getUsername() : saveUser.getUsername());
-saveUser.setFullname(userModel.getFullname()!=null ? userModel.getFullname() : saveUser.getFullname());
+saveUser.setFirstname(userModel.getFirstname()!=null ? userModel.getFirstname() : saveUser.getFirstname());
+saveUser.setLastname(userModel.getLastname()!=null ? userModel.getLastname() : saveUser.getLastname());
 saveUser.setEmail(userModel.getEmail()!=null ? userModel.getEmail() : saveUser.getEmail());
-saveUser.setAge(userModel.getAge()!= null ? userModel.getAge() : saveUser.getAge());
-saveUser.setSpeciality(userModel.getSpeciality()!=null ? userModel.getSpeciality() : saveUser.getSpeciality());
+saveUser.setCountry(userModel.getCountry()!=null ? userModel.getCountry() : saveUser.getCountry());
+saveUser.setCity(userModel.getCity()!=null ? userModel.getCity() : saveUser.getCity());
+
 userRepository.save(saveUser);
 return new ResponseEntity<>("test", HttpStatus.OK);
 }
-else if (role.equals("employee")){
+
+else if (role.equals("business")){
 UserModel saveUser = userOptional.get();
-saveUser.setUsername(userModel.getUsername()!=null ? userModel.getUsername() : saveUser.getUsername());
-saveUser.setFullname(userModel.getFullname()!=null ? userModel.getFullname() : saveUser.getFullname());
 saveUser.setEmail(userModel.getEmail()!=null ? userModel.getEmail() : saveUser.getEmail());
-saveUser.setAge(userModel.getAge()!= null ? userModel.getAge() : saveUser.getAge());
-saveUser.setSpeciality(userModel.getSpeciality()!=null ? userModel.getSpeciality() : saveUser.getSpeciality());
-saveUser.setDiploma(userModel.getDiploma()!=null ? userModel.getDiploma() : saveUser.getDiploma());
+saveUser.setBusiness_name(userModel.getBusiness_name()!=null ? userModel.getBusiness_name() : saveUser.getBusiness_name());
+saveUser.setBusiness_logo(userModel.getBusiness_logo()!=null ? userModel.getBusiness_logo() : saveUser.getBusiness_logo());
+saveUser.setAddress(userModel.getAddress()!=null ? userModel.getAddress() : saveUser.getAddress());
+saveUser.setCity(userModel.getCity()!=null ? userModel.getCity() : saveUser.getCity());
+saveUser.setPhonenumber(userModel.getPhonenumber()!=null ? userModel.getPhonenumber() : saveUser.getPhonenumber());
+saveUser.setCountry(userModel.getCountry()!=null ? userModel.getCountry() : saveUser.getCountry());
+saveUser.setBusiness_website(userModel.getBusiness_website()!=null ? userModel.getBusiness_website() : saveUser.getBusiness_website());
+
 userRepository.save(saveUser);
 return new ResponseEntity<>("DONE", HttpStatus.OK);
 }
-else if (role.equals("recruiteur")){
-UserModel saveUser = userOptional.get();
-saveUser.setUsername(userModel.getUsername()!=null ? userModel.getUsername() : saveUser.getUsername());
-saveUser.setEmail(userModel.getEmail()!=null ? userModel.getEmail() : saveUser.getEmail());
-saveUser.setEntreprise_name(userModel.getEntreprise_name()!=null ? userModel.getEntreprise_name() : saveUser.getEntreprise_name());
-saveUser.setEntreprise_domaine(userModel.getEntreprise_domaine()!=null ? userModel.getEntreprise_domaine() : saveUser.getEntreprise_domaine());
-userRepository.save(saveUser);
-return new ResponseEntity<>("DONE", HttpStatus.OK);
-}
-else if (role.equals("admin")){
+/*else if (role.equals("admin")){
 UserModel saveUser = userOptional.get();
 saveUser.setFullname(userModel.getFullname()!=null ? userModel.getFullname() : saveUser.getFullname());
 saveUser.setEmail(userModel.getEmail()!=null ? userModel.getEmail() : saveUser.getEmail());
 saveUser.setUsername(userModel.getUsername()!=null ? userModel.getUsername() : saveUser.getUsername());
 userRepository.save(saveUser);
 return new ResponseEntity<>("DONE", HttpStatus.OK);
-}
+}*/
 else {
 return new ResponseEntity<>("ERROR", HttpStatus.NOT_FOUND);
 
@@ -276,11 +293,11 @@ return new ResponseEntity<>("ERROR", HttpStatus.NOT_FOUND);
 private ResponseEntity<?> updatePicture(@RequestBody UserModel userModel){
 
 	 Authentication loggedInUser = SecurityContextHolder.getContext().getAuthentication();
-     String username = loggedInUser.getName();
-     UserModel user = userRepository.findByUsername(username);
+     String email = loggedInUser.getName();
+     UserModel user = userRepository.findByEmail(email);
      Optional<UserModel> userOptional = userRepository.findById(user.getId());
 
-UserModel e=userRepository.findByUsername(userOptional.get().getUsername());
+UserModel e=userRepository.findByEmail(userOptional.get().getEmail());
 
 try{
 UserModel saveUser =userOptional.get();
@@ -298,15 +315,15 @@ return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
 private ResponseEntity<?> updateEntrepriseLogo(@RequestBody UserModel userModel){
 
 	 Authentication loggedInUser = SecurityContextHolder.getContext().getAuthentication();
-     String username = loggedInUser.getName();
-     UserModel user = userRepository.findByUsername(username);
+     String email = loggedInUser.getName();
+     UserModel user = userRepository.findByEmail(email);
      Optional<UserModel> userOptional = userRepository.findById(user.getId());
 
-UserModel e=userRepository.findByUsername(userOptional.get().getUsername());
+UserModel e=userRepository.findByEmail(userOptional.get().getEmail());
 
 try{
 UserModel saveUser =userOptional.get();
-saveUser.setEntreprise_logo(userModel.getEntreprise_logo()!=null ? userModel.getEntreprise_logo() : saveUser.getEntreprise_logo());
+saveUser.setBusiness_logo(userModel.getBusiness_logo()!=null ? userModel.getBusiness_logo() : saveUser.getBusiness_logo());
 userRepository.save(saveUser);
 return new ResponseEntity<>(HttpStatus.OK);
 }catch(Exception ex)
@@ -326,5 +343,43 @@ public ResponseEntity<?> getUser(@PathVariable String id_user) {
 		return new ResponseEntity<>("Error finding user", HttpStatus.NOT_FOUND);
 	}
 }
+
+
+/*
+@RequestMapping(value="/register", method = RequestMethod.POST)
+public void registerUser( UserModel user)
+{
+
+    User existingUser = userRepository.findByEmailIdIgnoreCase(user.getEmailId());
+    if(existingUser != null)
+    {
+        modelAndView.addObject("message","This email already exists!");
+        modelAndView.setViewName("error");
+    }
+    else
+    {
+        userRepository.save(user);
+
+        ConfirmationToken confirmationToken = new ConfirmationToken(user);
+
+        confirmationTokenRepository.save(confirmationToken);
+
+        SimpleMailMessage mailMessage = new SimpleMailMessage();
+        mailMessage.setTo(user.getEmailId());
+        mailMessage.setSubject("Complete Registration!");
+        mailMessage.setFrom("chand312902@gmail.com");
+        mailMessage.setText("To confirm your account, please click here : "
+        +"http://localhost:8082/confirm-account?token="+confirmationToken.getConfirmationToken());
+
+        emailSenderService.sendEmail(mailMessage);
+
+        modelAndView.addObject("emailId", user.getEmailId());
+
+        modelAndView.setViewName("successfulRegisteration");
+    }
+
+    return modelAndView;
+}*/
+
 
 }

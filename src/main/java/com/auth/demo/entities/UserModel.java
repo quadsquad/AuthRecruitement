@@ -15,192 +15,156 @@ public class UserModel {
 private String id;
 @Indexed(unique = true, direction = IndexDirection.DESCENDING, dropDups = true)
 
-@Column(unique= true)
-private String username;
 private String password;
-private String fullname;
+private String confirmpassword;
 @Column(unique=true)
 private String email;
 private String role;
-private String age;
 private String userPicture;
-private String diploma;
-private String speciality; //web, mobile, tronc commun, BI, ...
+private String phonenumber;
+private String firstname;
+private String lastname;
+private String country;
+private String city;
+private boolean isEnabled;
 
+//@Column(unique=true)
+//private String username;
 
 //ADMIN FIELDS : fullname, email, username, password, userPicture
 
 // RECRUTEUR FIELDS : username, password, email, entreprise_name, entreprise_domaine, entreprise_logo
-private String entreprise_name;
-private String entreprise_domaine;
-private String entreprise_logo;
-
-
-//attr en comm : username, fullname,email, age,speciality, role
-
-//ADMIN CONSTRUCTOR
-public UserModel(String username, String fullname, String email, String userPicture, String role) {
-super();
-this.username = username;
-this.fullname = fullname;
-this.email = email;
-this.userPicture = userPicture;
-this.role = role;
-}
-
-public String getEntreprise_name() {
-return entreprise_name;
-}
-
-public void setEntreprise_name(String entreprise_name) {
-this.entreprise_name = entreprise_name;
-}
-
-public String getEntreprise_domaine() {
-return entreprise_domaine;
-}
-
-public void setEntreprise_domaine(String entreprise_domaine) {
-this.entreprise_domaine = entreprise_domaine;
-}
-
-public String getEntreprise_logo() {
-return entreprise_logo;
-}
-
-public void setEntreprise_logo(String entreprise_logo) {
-this.entreprise_logo = entreprise_logo;
-}
-
-public String getUserPicture() {
-return userPicture;
-}
-
-
-
-public void setUserPicture(String userPicture) {
-this.userPicture = userPicture;
-}
-
-public String getDiploma() {
-return diploma;
-}
-
-public void setDiploma(String diploma) {
-this.diploma = diploma;
-}
-
-public String getAge() {
-return age;
-}
-
-public void setAge(String age) {
-this.age = age;
-}
-
-public String getSpeciality() {
-return speciality;
-}
-
-public void setSpeciality(String speciality) {
-this.speciality = speciality;
-}
-
-
+private String business_name;
+private String business_logo;
+private String business_website;
+private String address;
 public String getId() {
-return id;
+	return id;
 }
-
 public void setId(String id) {
-this.id = id;
+	this.id = id;
 }
-
-public String getRole() {
-return role;
-}
-
-public void setRole(String role) {
-this.role = role;
-}
-
-public String getUsername() {
-return username;
-}
-
-public void setUsername(String username) {
-this.username = username;
-}
-
 public String getPassword() {
-return password;
+	return password;
 }
-
 public void setPassword(String password) {
-this.password = password;
+	this.password = password;
 }
-
-public String getFullname() {
-return fullname;
+public String getConfirmpassword() {
+	return confirmpassword;
 }
-
-public void setFullname(String fullname) {
-this.fullname = fullname;
+public void setConfirmpassword(String confirmpassword) {
+	confirmpassword = confirmpassword;
 }
-
-public String getEmail(){
-return email;
+public String getEmail() {
+	return email;
 }
-
-public void setEmail(String email){
-this.email= email;
+public void setEmail(String email) {
+	this.email = email;
 }
-
-
-//INTERNSHIP CONSTRUCTOR
-
-public UserModel(String username, String fullname, String email, String age, String userPicture,String speciality, String role) {
-super();
-this.username = username;
-this.fullname = fullname;
-this.email = email;
-this.age = age;
-this.userPicture = userPicture;
-this.speciality = speciality;
-this.role = role;
+public String getRole() {
+	return role;
 }
-
-//EMPLOYEE CONSTRUCTOR
-public UserModel(String username, String fullname, String email, String age,String userPicture, String speciality, String diploma, String role) {
-super();
-this.username = username;
-this.fullname = fullname;
-this.email = email;
-this.age = age;
-this.userPicture = userPicture;
-this.speciality = speciality;
-this.diploma = diploma;
-this.role = role;
+public void setRole(String role) {
+	this.role = role;
 }
-
-
-//RECRUIT CONSTRUCTOR
-public UserModel(String username, String email, String entreprise_name, String entreprise_domaine,
-String entreprise_logo, String role) {
-super();
-this.username = username;
-this.email = email;
-this.entreprise_name = entreprise_name;
-this.entreprise_domaine = entreprise_domaine;
-this.entreprise_logo = entreprise_logo;
-this.role = role;
-
+public String getUserPicture() {
+	return userPicture;
 }
-
+public void setUserPicture(String userPicture) {
+	this.userPicture = userPicture;
+}
+public String getPhonenumber() {
+	return phonenumber;
+}
+public void setPhonenumber(String phonenumber) {
+	this.phonenumber = phonenumber;
+}
+public String getFirstname() {
+	return firstname;
+}
+public void setFirstname(String firstname) {
+	this.firstname = firstname;
+}
+public String getLastname() {
+	return lastname;
+}
+public void setLastname(String lastname) {
+	this.lastname = lastname;
+}
+public String getCountry() {
+	return country;
+}
+public void setCountry(String country) {
+	this.country = country;
+}
+public String getCity() {
+	return city;
+}
+public void setCity(String city) {
+	this.city = city;
+}
+public String getBusiness_name() {
+	return business_name;
+}
+public void setBusiness_name(String business_name) {
+	this.business_name = business_name;
+}
+public String getBusiness_logo() {
+	return business_logo;
+}
+public void setBusiness_logo(String business_logo) {
+	this.business_logo = business_logo;
+}
+public String getBusiness_website() {
+	return business_website;
+}
+public void setBusiness_website(String business_website) {
+	this.business_website = business_website;
+}
+public String getAddress() {
+	return address;
+}
+public void setAddress(String address) {
+	this.address = address;
+}
 public UserModel() {
-// TODO Auto-generated constructor stub
+	super();
+	// TODO Auto-generated constructor stub
 }
+public UserModel(  String email, String phonenumber, String country,
+		String city, String business_name, String business_logo, String business_website, String address , String role) {
+	super();
 
+	this.email = email;
+	this.phonenumber = phonenumber;
+	this.country = country;
+	this.city = city;
+	this.business_name = business_name;
+	this.business_logo = business_logo;
+	this.business_website = business_website;
+	this.address = address;
+	this.role = role;
 
+}
+public UserModel(  String email, String role, String userPicture,
+		String firstname, String lastname, String country, String city) {
+	super();
+	this.email = email;
+	this.role = role;
+	this.userPicture = userPicture;
+	this.firstname = firstname;
+	this.lastname = lastname;
+	this.country = country;
+	this.city = city;
+
+}
+public boolean isEnabled() {
+	return isEnabled;
+}
+public void setEnabled(boolean isEnabled) {
+	this.isEnabled = isEnabled;
+}
 
 
 }

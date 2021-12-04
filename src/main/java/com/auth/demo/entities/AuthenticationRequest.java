@@ -1,111 +1,110 @@
 package com.auth.demo.entities;
 
+import javax.persistence.Column;
+
 public class AuthenticationRequest {
 
-	
-	private String username;
-	private String password;
-	private String fullname;
-	private String email;
-	private String role;
-	private String age;	
-	private String userPicture;
-	private String diploma;
-	private String speciality; //web, mobile, tronc commun, BI, ...
+private String password;
+private String confirmpassword;
+@Column(unique=true)
+private String email;
+private String role;
+private String userPicture;
+private String phonenumber;
+private String firstname;
+private String lastname;
+private String country;
+private String city;
+//ADMIN FIELDS : fullname, email, username, password, userPicture
 
-	// RECRUTEUR FIELDS : username, password, email, entreprise_name, entreprise_domaine, entreprise_logo
-	private String entreprise_name;
-	private String entreprise_domaine;
-	private String entreprise_logo;
+// RECRUTEUR FIELDS : username, password, email, entreprise_name, entreprise_domaine, entreprise_logo
+private String business_name;
+private String business_logo;
+private String business_website;
+private String address;
 
-	
-	public AuthenticationRequest() {
-		   // TODO document why this constructor is empty
-		 }
-	
-	public String getEntreprise_name() {
-		return entreprise_name;
-	}
-
-	public void setEntreprise_name(String entreprise_name) {
-		this.entreprise_name = entreprise_name;
-	}
-
-	public String getEntreprise_domaine() {
-		return entreprise_domaine;
-	}
-
-	public void setEntreprise_domaine(String entreprise_domaine) {
-		this.entreprise_domaine = entreprise_domaine;
-	}
-
-	public String getEntreprise_logo() {
-		return entreprise_logo;
-	}
-
-	public void setEntreprise_logo(String entreprise_logo) {
-		this.entreprise_logo = entreprise_logo;
-	}
-	
-
-	
-	public String getUserPicture() {
-		return userPicture;
-	}
-
-	public void setUserPicture(String userPicture) {
-		this.userPicture = userPicture;
-	}
-
-	
-	public String getUsername() {
-		return username;
-	}
-	public void setUsername(String username) {
-		this.username = username;
-	}
-	public String getPassword() {
-		return password;
-	}
-	public void setPassword(String password) {
-		this.password = password;
-	}
-	public String getFullname() {
-		return fullname;
-	}
-	public void setFullname(String fullname) {
-		this.fullname = fullname;
-	}
-	public String getEmail() {
-		return email;
-	}
-	public void setEmail(String email) {
-		this.email = email;
-	}
-	public String getRole() {
-		return role;
-	}
-	public void setRole(String role) {
-		this.role = role;
-	}
-	public String getAge() {
-		return age;
-	}
-	public void setAge(String age) {
-		this.age = age;
-	}
-	public String getDiploma() {
-		return diploma;
-	}
-	public void setDiploma(String diploma) {
-		this.diploma = diploma;
-	}
-	public String getSpeciality() {
-		return speciality;
-	}
-	public void setSpeciality(String speciality) {
-		this.speciality = speciality;
-	}
-	
-	
+public String getPassword() {
+	return password;
+}
+public void setPassword(String password) {
+	this.password = password;
+}
+public String getConfirmpassword() {
+	return confirmpassword;
+}
+public void setConfirmpassword(String confirmpassword) {
+	confirmpassword = confirmpassword;
+}
+public String getEmail() {
+	return email;
+}
+public void setEmail(String email) {
+	this.email = email;
+}
+public String getRole() {
+	return role;
+}
+public void setRole(String role) {
+	this.role = role;
+}
+public String getUserPicture() {
+	return userPicture;
+}
+public void setUserPicture(String userPicture) {
+	this.userPicture = userPicture;
+}
+public String getPhonenumber() {
+	return phonenumber;
+}
+public void setPhonenumber(String phonenumber) {
+	this.phonenumber = phonenumber;
+}
+public String getFirstname() {
+	return firstname;
+}
+public void setFirstname(String firstname) {
+	this.firstname = firstname;
+}
+public String getLastname() {
+	return lastname;
+}
+public void setLastname(String lastname) {
+	this.lastname = lastname;
+}
+public String getCountry() {
+	return country;
+}
+public void setCountry(String country) {
+	this.country = country;
+}
+public String getCity() {
+	return city;
+}
+public void setCity(String city) {
+	this.city = city;
+}
+public String getBusiness_name() {
+	return business_name;
+}
+public void setBusiness_name(String business_name) {
+	this.business_name = business_name;
+}
+public String getBusiness_logo() {
+	return business_logo;
+}
+public void setBusiness_logo(String business_logo) {
+	this.business_logo = business_logo;
+}
+public String getBusiness_website() {
+	return business_website;
+}
+public void setBusiness_website(String business_website) {
+	this.business_website = business_website;
+}
+public String getAddress() {
+	return address;
+}
+public void setAddress(String address) {
+	this.address = address;
+}
 }
