@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.auth.demo.entities.AuthenticationRequest;
@@ -54,7 +56,7 @@ private UserService userService;
 private JwtUtils jwtUtils;
 
 @Autowired
-private ConfirmationTokenRepository confirmationTokenRepository;
+private ConfirmationTokenRepository confirm;
 
 @Autowired
 private EmailSenderService emailSenderService;
@@ -192,7 +194,7 @@ try {
 userRepository.save(userModel);
 ConfirmationToken confirmationToken = new ConfirmationToken(userModel);
 
-confirmationTokenRepository.save(confirmationToken);
+confirm.save(confirmationToken);
 
 SimpleMailMessage mailMessage = new SimpleMailMessage();
 mailMessage.setTo(userModel.getEmail());
@@ -209,6 +211,26 @@ return ResponseEntity.ok(new AuthenticationResponse("Error during subscription"+
 
 }
 return ResponseEntity.ok(new AuthenticationResponse("Successful subscription"+email));
+
+}
+
+@RequestMapping(value="/confirm-account", method= {RequestMethod.GET, RequestMethod.POST})
+public ResponseEntity<?> confirmUserAccount(@RequestParam("token")String confirmationToken)
+{
+    ConfirmationToken token = confirm.findByConfirmationToken(confirmationToken);
+
+    if(token != null)
+    {
+        UserModel user = userRepository.findByEmail(token.getUser().getEmail());
+        user.setEnabled(true);
+        userRepository.save(user);
+        return ResponseEntity.ok(new AuthenticationResponse(" Account verified!"));
+    }
+    else
+    {
+       return  ResponseEntity.ok(new AuthenticationResponse(" The link is invalid or broken!"));
+        
+    }
 
 }
 
