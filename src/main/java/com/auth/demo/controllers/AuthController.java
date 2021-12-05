@@ -1,15 +1,13 @@
 package com.auth.demo.controllers;
 
 import java.util.Optional;
-import java.util.UUID;
-import java.util.Date;
+import java.net.URI;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -21,8 +19,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -153,7 +149,7 @@ String business_name= authenticationRequest.getBusiness_name();
 String email= authenticationRequest.getEmail();
 
 UserModel userModel= new UserModel();
-if(role.equals("particular"))
+if(role.equals("Particular"))
 {
 userModel.setLastname(lastname);
 userModel.setPassword(passwordencoder.encode(pwd));
@@ -164,7 +160,7 @@ userModel.setCity(city);
 userModel.setUserPicture(userPicture);
 userModel.setRole(role);
 userModel.setEnabled(false);
-} else if (role.equals("business"))
+} else if (role.equals("Business"))
 {
 userModel.setPassword(passwordencoder.encode(pwd));
 userModel.setEmail(email);
@@ -238,7 +234,10 @@ public ResponseEntity<?> confirmUserAccount(@RequestParam("token")String confirm
       UserModel user = userRepository.findByEmail(token.getUser().getEmail());
       user.setEnabled(true);
       userRepository.save(user);
-       return ResponseEntity.ok(new AuthenticationResponse(" Account verified!"));
+      
+       return ResponseEntity.status(HttpStatus.FOUND)
+    	        .location(URI.create("http://localhost:4200/verified"))
+    	        .build();
   }
    else
   {
@@ -369,7 +368,6 @@ return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
 }
 }
 
-//FN DE AHMED
 @GetMapping("/get-user/{id_user}")
 public ResponseEntity<?> getUser(@PathVariable String id_user) {
 	if (userRepository.findById(id_user).isPresent()) {
@@ -379,43 +377,6 @@ public ResponseEntity<?> getUser(@PathVariable String id_user) {
 		return new ResponseEntity<>("Error finding user", HttpStatus.NOT_FOUND);
 	}
 }
-
-
-/*
-@RequestMapping(value="/register", method = RequestMethod.POST)
-public void registerUser( UserModel user)
-{
-
-    User existingUser = userRepository.findByEmailIdIgnoreCase(user.getEmailId());
-    if(existingUser != null)
-    {
-        modelAndView.addObject("message","This email already exists!");
-        modelAndView.setViewName("error");
-    }
-    else
-    {
-        userRepository.save(user);
-
-        ConfirmationToken confirmationToken = new ConfirmationToken(user);
-
-        confirmationTokenRepository.save(confirmationToken);
-
-        SimpleMailMessage mailMessage = new SimpleMailMessage();
-        mailMessage.setTo(user.getEmailId());
-        mailMessage.setSubject("Complete Registration!");
-        mailMessage.setFrom("chand312902@gmail.com");
-        mailMessage.setText("To confirm your account, please click here : "
-        +"http://localhost:8082/confirm-account?token="+confirmationToken.getConfirmationToken());
-
-        emailSenderService.sendEmail(mailMessage);
-
-        modelAndView.addObject("emailId", user.getEmailId());
-
-        modelAndView.setViewName("successfulRegisteration");
-    }
-
-    return modelAndView;
-}*/
 
 
 }
