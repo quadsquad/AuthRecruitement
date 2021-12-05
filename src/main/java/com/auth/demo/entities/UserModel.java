@@ -54,7 +54,7 @@ public String getConfirmpassword() {
 	return confirmpassword;
 }
 public void setConfirmpassword(String confirmpassword) {
-	confirmpassword = confirmpassword;
+	this.confirmpassword = confirmpassword;
 }
 public String getEmail() {
 	return email;

@@ -1,6 +1,8 @@
 package com.auth.demo.controllers;
 
 import java.util.Optional;
+import java.util.UUID;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -189,12 +191,23 @@ userModel.setEnabled(false);
 else {
 System.err.println();
 }
+ConfirmationToken confirmationToken = new ConfirmationToken(userModel);
+try {
+	
+	System.out.println(confirmationToken.getConfirmationToken());
+	System.out.println(userModel);
+	confirm.save(confirmationToken);
+} catch (Exception ex) {
+	System.out.println("Error saving confirm token");
+}
 
 try {
 userRepository.save(userModel);
-ConfirmationToken confirmationToken = new ConfirmationToken(userModel);
-
-confirm.save(confirmationToken);
+//if (confirmationToken.getConfirmationToken() != null) {
+//	confirm.save(confirmationToken);
+//} else {
+//	System.out.println("Cannot save confirm token");
+//}
 
 SimpleMailMessage mailMessage = new SimpleMailMessage();
 mailMessage.setTo(userModel.getEmail());
@@ -207,30 +220,31 @@ emailSenderService.sendEmail(mailMessage);
 
 
 }catch(Exception e){
-return ResponseEntity.ok(new AuthenticationResponse("Error during subscription"+email));
+return ResponseEntity.ok(new AuthenticationResponse("Error during subscription: "+email));
 
 }
 return ResponseEntity.ok(new AuthenticationResponse("Successful subscription"+email));
 
 }
 
-@RequestMapping(value="/confirm-account", method= {RequestMethod.GET, RequestMethod.POST})
+@GetMapping("/confirm-account")
 public ResponseEntity<?> confirmUserAccount(@RequestParam("token")String confirmationToken)
 {
     ConfirmationToken token = confirm.findByConfirmationToken(confirmationToken);
+    System.out.println("Your confirm token is "+token.getConfirmationToken());
 
-    if(token != null)
-    {
-        UserModel user = userRepository.findByEmail(token.getUser().getEmail());
-        user.setEnabled(true);
-        userRepository.save(user);
-        return ResponseEntity.ok(new AuthenticationResponse(" Account verified!"));
-    }
-    else
-    {
-       return  ResponseEntity.ok(new AuthenticationResponse(" The link is invalid or broken!"));
-        
-    }
+   if(token.getConfirmationToken() != null)
+  {
+      UserModel user = userRepository.findByEmail(token.getUser().getEmail());
+      user.setEnabled(true);
+      userRepository.save(user);
+       return ResponseEntity.ok(new AuthenticationResponse(" Account verified!"));
+  }
+   else
+  {
+     return  ResponseEntity.ok(new AuthenticationResponse(" The link is invalid or broken!"));
+       
+   }
 
 }
 

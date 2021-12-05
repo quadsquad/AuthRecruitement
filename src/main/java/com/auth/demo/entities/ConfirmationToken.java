@@ -70,4 +70,10 @@ public class ConfirmationToken {
 		this.user = user;
 	}
 
+	@Override
+	public String toString() {
+		return "ConfirmationToken [tokenid=" + tokenid + ", confirmationToken=" + confirmationToken + ", createdDate="
+				+ createdDate + ", user=" + user + "]";
+	}
+
 }
