@@ -2,6 +2,7 @@ package com.auth.demo.controllers;
 
 import java.util.Optional;
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,6 +60,8 @@ private ConfirmationTokenRepository confirm;
 @Autowired
 private EmailSenderService emailSenderService;
 
+List<Object> recruters = new ArrayList<Object>();
+
 @GetMapping("/content")
 private String testingToken(AuthenticationRequest authenticationrequest, UserModel usermodel, String authenticationResponse){
 
@@ -81,6 +84,23 @@ private ResponseEntity<?> getToken(AuthenticationRequest authenticationrequest, 
 	     	
 	     return new ResponseEntity<>(email, HttpStatus.ACCEPTED);  	
        
+}
+
+@GetMapping("/findallrecruiters")
+public ResponseEntity<?> getAllRecruters(){
+	List<UserModel> users =	userRepository.findAll();
+	if(!users .isEmpty()){
+		for (int i = 0; i<users.size(); i++) {
+			if (users.get(i).getRole().equals("Business")) {
+				recruters.add(users.get(i));
+			}
+		}
+		return new ResponseEntity<>(recruters , HttpStatus.OK);
+		}
+	else 
+	{
+			return new ResponseEntity<String>("No users  Available",HttpStatus.NOT_FOUND);
+	}
 }
 
 @GetMapping("/findallusers")
