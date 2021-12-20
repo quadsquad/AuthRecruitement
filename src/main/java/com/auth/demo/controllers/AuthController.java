@@ -219,11 +219,6 @@ try {
 
 try {
 userRepository.save(userModel);
-//if (confirmationToken.getConfirmationToken() != null) {
-//	confirm.save(confirmationToken);
-//} else {
-//	System.out.println("Cannot save confirm token");
-//}
 
 SimpleMailMessage mailMessage = new SimpleMailMessage();
 mailMessage.setTo(userModel.getEmail());
