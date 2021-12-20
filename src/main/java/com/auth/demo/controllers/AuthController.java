@@ -225,7 +225,7 @@ mailMessage.setTo(userModel.getEmail());
 mailMessage.setSubject("Complete Registration!");
 mailMessage.setFrom("quadsquad1997@gmail.com");
 mailMessage.setText("To confirm your account, please click here : "
-+"http://localhost:8088/confirm-account?token="+confirmationToken.getConfirmationToken());
++"https://authrecruitement.herokuapp.com/confirm-account?token="+confirmationToken.getConfirmationToken());
 
 emailSenderService.sendEmail(mailMessage);
 
