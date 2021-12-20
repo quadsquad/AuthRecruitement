@@ -281,7 +281,7 @@ return ResponseEntity.ok(new AuthenticationResponse(e.getMessage()));
     Authentication loggedInUser = SecurityContextHolder.getContext().getAuthentication();
     UserModel user = userRepository.findByEmail(email);
     String role = user.getRole();
-     return ResponseEntity.ok(new AuthenticationResponse(generatedToken, role));
+     return ResponseEntity.ok(new AuthenticationResponse(generatedToken, role, user));
 
 }
 
