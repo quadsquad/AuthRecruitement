@@ -1,11 +1,9 @@
 package com.auth.demo.services;
 
 import java.util.ArrayList;
-import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -21,13 +19,13 @@ public class UserService implements UserDetailsService{
 	@Autowired 
 	private UserRepository userRepo;
 	
-	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException{
-		UserModel findbyUsername=	userRepo.findByUsername(username);
+	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException{
+		UserModel findByEmail=	userRepo.findByEmail(email);
 			
-		if(findbyUsername == null)
+		if(findByEmail == null)
 			return null;
-		String pwd=findbyUsername.getPassword();
-		String name=findbyUsername.getUsername();
+		String pwd=findByEmail.getPassword();
+		String name=findByEmail.getEmail();
 		
 		return new User(name, pwd,   new ArrayList<>());
 	}
@@ -36,22 +34,29 @@ public class UserService implements UserDetailsService{
 	public UserModel getInfoUserConnected() throws UsernameNotFoundException {
 
 		String connected =  SecurityContextHolder.getContext().getAuthentication().getName();
-		UserModel findbyUsername=	userRepo.findByUsername(connected);
+		UserModel findByEmail=	userRepo.findByEmail(connected);
 
-		if(findbyUsername == null) 
+		if(findByEmail == null) 
 			return null;
-		String role = findbyUsername.getRole();
-		String fullname = findbyUsername.getFullname();
-		String email = findbyUsername.getEmail();
-		String age = findbyUsername.getAge();
-		String userPicture = findbyUsername.getUserPicture();
-		String speciality = findbyUsername.getSpeciality();
-		String diploma = findbyUsername.getDiploma();
-		if (role.equals("stagiaire")){
-			return new UserModel(connected,fullname,email,age,userPicture,speciality,role);
+		String lastname = findByEmail.getLastname();
+		String firstname = findByEmail.getFirstname();
+		String email = findByEmail.getEmail();
+		String userPicture = findByEmail.getUserPicture();
+		String role = findByEmail.getRole();
+		String phonenumber= findByEmail.getPhonenumber();
+		String country= findByEmail.getCountry();
+		String city= findByEmail.getCity();
+		String business_logo= findByEmail.getBusiness_logo();
+	    String address = findByEmail.getAddress();
+	    String business_website= findByEmail.getBusiness_website();
+	    String business_name= findByEmail.getBusiness_name();
+	    
+		if (role.equals("particular")){
+			return new UserModel(connected, role, userPicture, firstname, lastname, country, city);
 		}
-		return new UserModel(connected,fullname,email,age,userPicture,speciality,diploma,role);		
+		return new UserModel(connected, phonenumber, country, city, business_name, business_logo, business_website, address, role)	;	
 	}
+
 
 	
 	
