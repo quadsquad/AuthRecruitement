@@ -15,6 +15,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -250,11 +251,22 @@ public ResponseEntity<?> confirmUserAccount(@RequestParam("token")String confirm
         confirm.delete(token);
         
          return ResponseEntity.status(HttpStatus.FOUND)
+        		.location(URI.create("https://authrecruitement.herokuapp.com/delete-confirm-token/"+token.getConfirmationToken()))
       	        .location(URI.create("http://localhost:4200/verified"))
       	        .build();
     } catch (Exception ex) {
     	return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
+}
+
+@DeleteMapping("/delete-confirm-token/{confirmToken}")
+public ResponseEntity<?> deleteConfirmToken(@PathVariable String confirmToken) {
+	try {
+		confirm.deleteByConfirmationToken(confirmToken);
+		return new ResponseEntity<>("Confirmation Token is Deleted", HttpStatus.OK);
+	} catch (Exception ex) {
+		return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+	}
 }
 
 @PostMapping("/auth")
