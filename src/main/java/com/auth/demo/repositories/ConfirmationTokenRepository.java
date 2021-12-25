@@ -9,4 +9,6 @@ import com.auth.demo.entities.ConfirmationToken;
 public interface ConfirmationTokenRepository extends MongoRepository<ConfirmationToken, String> {
    
 	ConfirmationToken findByConfirmationToken(String confirmationToken);
+	
+	void deleteByConfirmationToken(String confirmationToken);
 }
