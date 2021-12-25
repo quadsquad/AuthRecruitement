@@ -249,6 +249,7 @@ public ResponseEntity<?> confirmUserAccount(@RequestParam("token")String confirm
       UserModel user = userRepository.findByEmail(token.getUser().getEmail());
       user.setEnabled(true);
       userRepository.save(user);
+      confirm.delete(token);
       
        return ResponseEntity.status(HttpStatus.FOUND)
     	        .location(URI.create("http://localhost:4200/verified"))
