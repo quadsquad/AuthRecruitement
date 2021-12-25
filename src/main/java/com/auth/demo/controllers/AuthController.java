@@ -243,24 +243,18 @@ public ResponseEntity<?> confirmUserAccount(@RequestParam("token")String confirm
 {
     ConfirmationToken token = confirm.findByConfirmationToken(confirmationToken);
     System.out.println("Your confirm token is "+token.getConfirmationToken());
-
-   if(token.getConfirmationToken() != null)
-  {
-      UserModel user = userRepository.findByEmail(token.getUser().getEmail());
-      user.setEnabled(true);
-      userRepository.save(user);
-      confirm.delete(token);
-      
-       return ResponseEntity.status(HttpStatus.FOUND)
-    	        .location(URI.create("http://localhost:4200/verified"))
-    	        .build();
-  }
-   else
-  {
-     return  ResponseEntity.ok(new AuthenticationResponse(" The link is invalid or broken!"));
-       
-   }
-
+    try {
+    	UserModel user = userRepository.findByEmail(token.getUser().getEmail());
+        user.setEnabled(true);
+        userRepository.save(user);
+        confirm.delete(token);
+        
+         return ResponseEntity.status(HttpStatus.FOUND)
+      	        .location(URI.create("http://localhost:4200/verified"))
+      	        .build();
+    } catch (Exception ex) {
+    	return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    }
 }
 
 @PostMapping("/auth")
