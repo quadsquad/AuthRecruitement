@@ -34,7 +34,7 @@ import com.auth.demo.services.JwtUtils;
 import com.auth.demo.services.UserService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-@CrossOrigin(origins = "https://myworldjob.herokuapp.com")
+@CrossOrigin(origins = {"https://myworldjob.herokuapp.com", "http://localhost:4200"})
 @RestController
 public class AuthController {
 
