@@ -15,7 +15,7 @@ import com.auth.demo.entities.UserModel;
 
 @SpringBootApplication
 @EnableEurekaClient
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "https://myworldjob.herokuapp.com")
 public class AuthRecruitementApplication {
 
 	public static void main(String[] args) {
