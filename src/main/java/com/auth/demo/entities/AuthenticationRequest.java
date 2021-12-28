@@ -14,6 +14,7 @@ private String phonenumber;
 private String firstname;
 private String lastname;
 private String country;
+private String countryIso;
 private String city;
 //ADMIN FIELDS : fullname, email, username, password, userPicture
 
@@ -106,5 +107,11 @@ public String getAddress() {
 }
 public void setAddress(String address) {
 	this.address = address;
+}
+public String getCountryIso() {
+	return countryIso;
+}
+public void setCountryIso(String countryIso) {
+	this.countryIso = countryIso;
 }
 }

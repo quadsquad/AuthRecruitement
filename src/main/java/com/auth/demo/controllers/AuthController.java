@@ -129,6 +129,7 @@ private UserModel getuser(AuthenticationRequest authenticationrequest, UserModel
 	String role = user.getRole();
 	String phonenumber= user.getPhonenumber();
 	String country= user.getCountry();
+	String countryIso= user.getCountryIso();
 	String city= user.getCity();
 	String business_logo= user.getBusiness_logo();
     String address = user.getAddress();
@@ -138,7 +139,7 @@ private UserModel getuser(AuthenticationRequest authenticationrequest, UserModel
      if (role.equals("particular")){
 return new UserModel(email, role, userPicture, firstname, lastname, country, city);
 }else{
-return new UserModel(email, phonenumber, country, city, business_name, business_logo, business_website, address, role);
+return new UserModel(email, phonenumber, country, countryIso, city, business_name, business_logo, business_website, address, role);
 }
 }
 
@@ -161,6 +162,7 @@ String userPicture = authenticationRequest.getUserPicture();
 String role = authenticationRequest.getRole();
 String phonenumber= authenticationRequest.getPhonenumber();
 String country= authenticationRequest.getCountry();
+String countryIso= authenticationRequest.getCountryIso();
 String city= authenticationRequest.getCity();
 String business_logo= authenticationRequest.getBusiness_logo();
 String address = authenticationRequest.getAddress();
@@ -190,6 +192,7 @@ userModel.setBusiness_website(business_website);
 userModel.setAddress(address);
 userModel.setPhonenumber(phonenumber);
 userModel.setCountry(country);
+userModel.setCountryIso(countryIso);
 userModel.setCity(city);
 userModel.setRole(role);
 userModel.setEnabled(false);
@@ -277,6 +280,25 @@ return ResponseEntity.ok(new AuthenticationResponse(e.getMessage()));
     String role = user.getRole();
      return ResponseEntity.ok(new AuthenticationResponse(generatedToken, role, user));
 
+}
+
+@PutMapping("/update-business-profile/{idB}")
+public ResponseEntity<?> updateBusinessProfile(@RequestBody UserModel userModel, @PathVariable String idB) {
+	try {
+		Optional<UserModel> userB = userRepository.findById(idB);
+		UserModel userBToSave = userB.get();
+		userBToSave.setEmail(userModel.getEmail()!=null ? userModel.getEmail() : userBToSave.getEmail());
+		userBToSave.setBusiness_name(userModel.getBusiness_name()!=null ? userModel.getBusiness_name() : userBToSave.getBusiness_name());
+		userBToSave.setAddress(userModel.getAddress()!=null ? userModel.getAddress() : userBToSave.getAddress());
+		userBToSave.setCity(userModel.getCity()!=null ? userModel.getCity() : userBToSave.getCity());
+		userBToSave.setPhonenumber(userModel.getPhonenumber()!=null ? userModel.getPhonenumber() : userBToSave.getPhonenumber());
+		userBToSave.setCountry(userModel.getCountry()!=null ? userModel.getCountry() : userBToSave.getCountry());
+		userBToSave.setBusiness_website(userModel.getBusiness_website()!=null ? userModel.getBusiness_website() : userBToSave.getBusiness_website());
+		userRepository.save(userBToSave);
+		return new ResponseEntity<UserModel>(userBToSave, HttpStatus.OK);
+	} catch (Exception ex) {
+		return new ResponseEntity<>("ERROR UPDATING BUSINESS PROFILE", HttpStatus.BAD_REQUEST);
+	}
 }
 
 
