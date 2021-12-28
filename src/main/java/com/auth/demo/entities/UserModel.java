@@ -26,6 +26,7 @@ private String firstname;
 private String lastname;
 private String country;
 private String city;
+private String countryIso;
 private boolean isEnabled;
 
 //@Column(unique=true)
@@ -132,13 +133,14 @@ public UserModel() {
 	super();
 	// TODO Auto-generated constructor stub
 }
-public UserModel(  String email, String phonenumber, String country,
+public UserModel(  String email, String phonenumber, String country, String countryIso,
 		String city, String business_name, String business_logo, String business_website, String address , String role) {
 	super();
 
 	this.email = email;
 	this.phonenumber = phonenumber;
 	this.country = country;
+	this.countryIso = countryIso;
 	this.city = city;
 	this.business_name = business_name;
 	this.business_logo = business_logo;
@@ -164,6 +166,12 @@ public boolean isEnabled() {
 }
 public void setEnabled(boolean isEnabled) {
 	this.isEnabled = isEnabled;
+}
+public String getCountryIso() {
+	return countryIso;
+}
+public void setCountryIso(String countryIso) {
+	this.countryIso = countryIso;
 }
 
 
