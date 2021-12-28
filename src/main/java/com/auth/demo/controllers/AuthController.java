@@ -296,6 +296,7 @@ public ResponseEntity<?> updateBusinessProfile(@RequestBody UserModel userModel,
 		userBToSave.setCity(userModel.getCity()!=null ? userModel.getCity() : userBToSave.getCity());
 		userBToSave.setPhonenumber(userModel.getPhonenumber()!=null ? userModel.getPhonenumber() : userBToSave.getPhonenumber());
 		userBToSave.setCountry(userModel.getCountry()!=null ? userModel.getCountry() : userBToSave.getCountry());
+		userBToSave.setCountryIso(userModel.getCountryIso()!=null ? userModel.getCountryIso() : userBToSave.getCountryIso());
 		userBToSave.setBusiness_website(userModel.getBusiness_website()!=null ? userModel.getBusiness_website() : userBToSave.getBusiness_website());
 		userRepository.save(userBToSave);
 		return new ResponseEntity<UserModel>(userBToSave, HttpStatus.OK);
