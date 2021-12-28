@@ -306,6 +306,19 @@ public ResponseEntity<?> updateBusinessProfile(@RequestBody UserModel userModel,
 	}
 }
 
+@PutMapping("/update-business-logo/{idB}")
+public ResponseEntity<?> updateBusinessLogo(@RequestBody UserModel userModel, @PathVariable String idB) {
+	try {
+		Optional<UserModel> userB = userRepository.findById(idB);
+		UserModel userBToSave = userB.get();
+		userBToSave.setBusiness_logo(userModel.getBusiness_logo());
+		userRepository.save(userBToSave);
+		return new ResponseEntity<>("BUSINESS LOGO UPDATED SUCCESSFULY", HttpStatus.OK);
+	} catch (Exception ex) {
+		return new ResponseEntity<>("ERROR UPDATING BUSINESS LOGO", HttpStatus.BAD_REQUEST);
+	}
+}
+
 
 //Update Profile
 @PutMapping("/updateprofileconnected")
