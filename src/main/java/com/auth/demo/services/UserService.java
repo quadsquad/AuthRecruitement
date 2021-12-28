@@ -45,6 +45,7 @@ public class UserService implements UserDetailsService{
 		String role = findByEmail.getRole();
 		String phonenumber= findByEmail.getPhonenumber();
 		String country= findByEmail.getCountry();
+		String codeCountry= findByEmail.getCodeCountry();
 		String countryIso = findByEmail.getCountryIso();
 		String city= findByEmail.getCity();
 		String business_logo= findByEmail.getBusiness_logo();
@@ -55,7 +56,7 @@ public class UserService implements UserDetailsService{
 		if (role.equals("particular")){
 			return new UserModel(connected, role, userPicture, firstname, lastname, country, city);
 		}
-		return new UserModel(connected, phonenumber, country, countryIso, city, business_name, business_logo, business_website, address, role)	;	
+		return new UserModel(connected, phonenumber, country, codeCountry, countryIso, city, business_name, business_logo, business_website, address, role)	;	
 	}
 
 

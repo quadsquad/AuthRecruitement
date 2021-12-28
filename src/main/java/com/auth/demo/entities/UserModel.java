@@ -25,6 +25,7 @@ private String phonenumber;
 private String firstname;
 private String lastname;
 private String country;
+private String codeCountry;
 private String city;
 private String countryIso;
 private boolean isEnabled;
@@ -133,13 +134,14 @@ public UserModel() {
 	super();
 	// TODO Auto-generated constructor stub
 }
-public UserModel(  String email, String phonenumber, String country, String countryIso,
+public UserModel(  String email, String phonenumber, String country, String codeCountry, String countryIso,
 		String city, String business_name, String business_logo, String business_website, String address , String role) {
 	super();
 
 	this.email = email;
 	this.phonenumber = phonenumber;
 	this.country = country;
+	this.codeCountry = codeCountry;
 	this.countryIso = countryIso;
 	this.city = city;
 	this.business_name = business_name;
@@ -172,6 +174,12 @@ public String getCountryIso() {
 }
 public void setCountryIso(String countryIso) {
 	this.countryIso = countryIso;
+}
+public String getCodeCountry() {
+	return codeCountry;
+}
+public void setCodeCountry(String codeCountry) {
+	this.codeCountry = codeCountry;
 }
 
 

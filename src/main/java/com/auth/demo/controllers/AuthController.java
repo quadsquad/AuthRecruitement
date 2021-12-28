@@ -129,6 +129,7 @@ private UserModel getuser(AuthenticationRequest authenticationrequest, UserModel
 	String role = user.getRole();
 	String phonenumber= user.getPhonenumber();
 	String country= user.getCountry();
+	String codeCountry= user.getCodeCountry();
 	String countryIso= user.getCountryIso();
 	String city= user.getCity();
 	String business_logo= user.getBusiness_logo();
@@ -139,7 +140,7 @@ private UserModel getuser(AuthenticationRequest authenticationrequest, UserModel
      if (role.equals("particular")){
 return new UserModel(email, role, userPicture, firstname, lastname, country, city);
 }else{
-return new UserModel(email, phonenumber, country, countryIso, city, business_name, business_logo, business_website, address, role);
+return new UserModel(email, phonenumber, country, codeCountry, countryIso, city, business_name, business_logo, business_website, address, role);
 }
 }
 
