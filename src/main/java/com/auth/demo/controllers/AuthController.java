@@ -311,6 +311,15 @@ public ResponseEntity<?> updateBusinessLogo(@RequestBody UserModel userModel, @P
 	try {
 		Optional<UserModel> userB = userRepository.findById(idB);
 		UserModel userBToSave = userB.get();
+		userBToSave.setEmail(userModel.getEmail()!=null ? userModel.getEmail() : userBToSave.getEmail());
+		userBToSave.setBusiness_name(userModel.getBusiness_name()!=null ? userModel.getBusiness_name() : userBToSave.getBusiness_name());
+		userBToSave.setAddress(userModel.getAddress()!=null ? userModel.getAddress() : userBToSave.getAddress());
+		userBToSave.setCity(userModel.getCity()!=null ? userModel.getCity() : userBToSave.getCity());
+		userBToSave.setPhonenumber(userModel.getPhonenumber()!=null ? userModel.getPhonenumber() : userBToSave.getPhonenumber());
+		userBToSave.setCountry(userModel.getCountry()!=null ? userModel.getCountry() : userBToSave.getCountry());
+		userBToSave.setCountryIso(userModel.getCountryIso()!=null ? userModel.getCountryIso() : userBToSave.getCountryIso());
+		userBToSave.setCodeCountry(userModel.getCodeCountry()!=null ? userModel.getCodeCountry() : userBToSave.getCodeCountry());
+		userBToSave.setBusiness_website(userModel.getBusiness_website()!=null ? userModel.getBusiness_website() : userBToSave.getBusiness_website());
 		userBToSave.setBusiness_logo(userModel.getBusiness_logo());
 		userRepository.save(userBToSave);
 		return new ResponseEntity<>("BUSINESS LOGO UPDATED SUCCESSFULY", HttpStatus.OK);
