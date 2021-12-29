@@ -137,7 +137,7 @@ private UserModel getuser(AuthenticationRequest authenticationrequest, UserModel
     String business_website= user.getBusiness_website();
     String business_name= user.getBusiness_name();
 
-     if (role.equals("particular")){
+     if (role.equals("Particular")){
 return new UserModel(email, role, userPicture, firstname, lastname, country, city);
 }else{
 return new UserModel(email, phonenumber, country, codeCountry, countryIso, city, business_name, business_logo, business_website, address, role);
