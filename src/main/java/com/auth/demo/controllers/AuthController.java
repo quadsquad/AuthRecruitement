@@ -118,7 +118,7 @@ public ResponseEntity<?> getAllUsers(){
 
 
 @GetMapping("/getuserconnected")
-private UserModel getuser(AuthenticationRequest authenticationrequest, UserModel usermodel){
+public ResponseEntity<?> getuser(AuthenticationRequest authenticationrequest, UserModel usermodel){
 
  Authentication loggedInUser = SecurityContextHolder.getContext().getAuthentication();
      String email = loggedInUser.getName();
@@ -138,9 +138,11 @@ private UserModel getuser(AuthenticationRequest authenticationrequest, UserModel
     String business_name= user.getBusiness_name();
 
      if (role.equals("Particular")){
-return new UserModel(email, role, userPicture, firstname, lastname, country, city);
+    	 UserModel up = new UserModel(email, role, userPicture, firstname, lastname, country, city);
+    	 return new ResponseEntity<UserModel>(up, HttpStatus.OK);
 }else{
-return new UserModel(email, phonenumber, country, codeCountry, countryIso, city, business_name, business_logo, business_website, address, role);
+	UserModel uother = new UserModel(email, phonenumber, country, codeCountry, countryIso, city, business_name, business_logo, business_website, address, role);
+	return new ResponseEntity<UserModel>(uother, HttpStatus.OK);
 }
 }
 
